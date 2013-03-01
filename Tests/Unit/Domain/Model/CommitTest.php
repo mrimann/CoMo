@@ -134,5 +134,18 @@ class CommitTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			$this->fixture->getCommitClass()
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function getMonthIdentifierReturnsProperValue() {
+		$date = new \DateTime('2013-03-01');
+		$this->fixture->setDate($date);
+
+		$this->assertEquals(
+			$this->fixture->getMonthIdentifier(),
+			'2013-03'
+		);
+	}
 }
 ?>

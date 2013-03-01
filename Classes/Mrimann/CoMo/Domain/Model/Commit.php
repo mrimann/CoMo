@@ -230,6 +230,15 @@ class Commit {
 	}
 
 	/**
+	 * Returns the month identifier in the format "YYYY-MM" of the commit's date
+	 *
+	 * @return string the month identifier
+	 */
+	public function getMonthIdentifier() {
+		return $this->getDate()->format('Y-m');
+	}
+
+	/**
 	 * Get the Commit's commit class
 	 *
 	 * @return string The Commit's commit class
