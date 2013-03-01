@@ -68,20 +68,26 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 		}
 
 		// process each single repository
+		$addedCount = 0;
+		$skippedCount = 0;
 		foreach ($repoLines as $repoLine) {
 			// TODO: Check if we can extract the title of a repo somehow
 			$title = '';
 			$repoUrl = $this->buildRepoUrl($repoLine);
 
-			$repo = new \Mrimann\CoMo\Domain\Model\Repository();
-			$repo->setUrl($repoUrl);
-			$repo->setTitle($title);
+			if ($this->repositoryRepository->countByUrl($repoUrl) == 0) {
+				$repo = new \Mrimann\CoMo\Domain\Model\Repository();
+				$repo->setUrl($repoUrl);
+				$repo->setTitle($title);
 
-			// Add repository to the database
-			// TODO: Check if that repository already exists before adding it!
-			$this->repositoryRepository->add($repo);
-
-			$this->outputLine('-> added repository "%s"', array($repoUrl));
+				// Add repository to the database
+				$this->repositoryRepository->add($repo);
+				$addedCount++;
+				$this->outputLine('-> added repository "%s"', array($repoUrl));
+			} else {
+				$skippedCount++;
+				$this->outputLine('-| skipped repository "%s" - exists already', array($repoUrl));
+			}
 		}
 	}
 
