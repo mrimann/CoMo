@@ -12,7 +12,7 @@
 
 -
   name: 'bar'
-  uriPattern: 'mrimann.xlifftranslator'
+  uriPattern: 'mrimann.como'
   defaults:
     '@controller': 'Standard'
     '@action':     'index'
