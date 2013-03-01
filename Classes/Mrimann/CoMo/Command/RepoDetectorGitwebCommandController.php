@@ -56,18 +56,18 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 		// split the list
 		$list = fopen($url, 'r');
 
-		// TODO: Check if this is really working
-		while ($repoList = fread($list,50000)) {
-
-			$repoLines = explode("\n", $repoList);
-			$this->outputLine('Found %s repositories.', array(count($repoLines)));
-		}
+		// TODO: Check if this is really working also on remote systems
+		// Read list of repositories from the Gitweb output
+		$repoList = file_get_contents($url);
+		$repoLines = explode("\n", $repoList);
+		$this->outputLine('Found %s repositories.', array(count($repoLines)));
 
 		if (empty($repoLines)) {
 			$this->outputLine('No repos found, exiting.');
 			return;
 		}
 
+		// process each single repository
 		foreach ($repoLines as $repoLine) {
 			// TODO: Check if we can extract the title of a repo somehow
 			$title = '';
