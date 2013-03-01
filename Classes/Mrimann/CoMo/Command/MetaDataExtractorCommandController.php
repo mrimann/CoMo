@@ -38,7 +38,7 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 	 * @return void
 	 */
 	public function processRepositoriesCommand() {
-		$repositories = $this->repositoryRepository->findAll();
+		$repositories = $this->repositoryRepository->findByIsActive(TRUE);
 		foreach ($repositories as $repository) {
 			$this->outputLine('Going to process repository at %s', array($repository->getUrl()));
 			$this->processSingleRepository($repository);
