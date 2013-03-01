@@ -39,6 +39,15 @@ class Repository {
 	}
 
 	/**
+	 * Returns the identity of this repository
+	 *
+	 * @return string the UUID of this repository
+	 */
+	public function getIdentity() {
+		return $this->Persistence_Object_Identifier;
+	}
+
+	/**
 	 * Get the Repository's title
 	 *
 	 * @return string The Repository's title
