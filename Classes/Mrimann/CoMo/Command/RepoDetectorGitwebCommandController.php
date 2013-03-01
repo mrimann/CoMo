@@ -71,8 +71,7 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 		$addedCount = 0;
 		$skippedCount = 0;
 		foreach ($repoLines as $repoLine) {
-			// TODO: Check if we can extract the title of a repo somehow
-			$title = '';
+			$title = $this->getRepoTitleFromRepoLine($repoLine);
 			$repoUrl = $this->buildRepoUrl($repoLine);
 
 			if ($this->repositoryRepository->countByUrl($repoUrl) == 0) {
@@ -118,6 +117,27 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 		}
 
 		return $this->baseUrl . $glue . $lineParts[0];
+	}
+
+	/**
+	 * Extracts the name from the path to a repository by taking the
+	 * last part of the path (e.g. the filename) and stripping off the
+	 * trailing ".git"
+	 *
+	 * @param string the line from Gitweb Text-Output
+	 * @return string the guessed repository name
+	 */
+	protected function getRepoTitleFromRepoLine($repoLine) {
+		$lineParts = explode(' ', $repoLine);
+		$pathParts = explode('/', $lineParts[0]);
+		$repoName = $pathParts[count($pathParts)-1];
+
+		// Strip off the ".git" extension of the repo-name if needed
+		if (substr($repoName, -4) == '.git') {
+			$repoName = substr($repoName, 0, strlen($repoName)-4);
+		}
+
+		return $repoName;
 	}
 }
 
