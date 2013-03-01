@@ -40,11 +40,16 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 	 * Use this command to read a list of repos from a Gitweb "website" and add those repositories
 	 * to the database for further processing afterwards.
 	 *
+	 * Call this with the URL to your Gitweb-Fronten, e.g. http://git.company.tld/ and the base-URL
+	 * for the access to the Git repositories, could be e.g. "ssh://git@git.company.tld/" (if you're
+	 * using Gitolite or the like).
+	 *
 	 * @param string $url The URL to Gitweb
 	 * @param string $baseUrl The base URL that is put in front of the single repo's path
 	 * @return void
 	 */
 	public function fetchReposCommand($url, $baseUrl) {
+		$url = $url . '?a=project_index';
 		if (!@fopen($url, r)) {
 			throw new \TYPO3\Flow\Exception(
 				sprintf(
@@ -62,7 +67,6 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 		// split the list
 		$list = fopen($url, 'r');
 
-		// TODO: Check if this is really working also on remote systems
 		// Read list of repositories from the Gitweb output
 		$repoList = file_get_contents($url);
 		$repoLines = explode("\n", $repoList);

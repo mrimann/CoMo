@@ -42,6 +42,7 @@ class Repository {
 
 	public function __construct() {
 		$this->setIsActive(FALSE);
+		$this->setLastProcessedCommit('');
 	}
 
 	/**
