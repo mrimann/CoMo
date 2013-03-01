@@ -27,6 +27,12 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 	var $repositoryRepository;
 
 	/**
+	 * @var \Mrimann\CoMo\Domain\Repository\CommitRepository
+	 * @Flow\Inject
+	 */
+	var $commitRepository;
+
+	/**
 	 * Extracts meta data from the commits of a repository
 	 *
 	 * @return void
@@ -47,9 +53,60 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 		$this->outputLine('-> working directory is: ' . $workingDirectory);
 
 		$this->prepareCachedClone($repository, $workingDirectory);
-		$this->outputLine('-> cached clone is read to rumble...');
+		$this->outputLine('-> cached clone is ready to rumble...');
+
+		$lastProcessedHash = $this->extractCommits($repository);
+		$repository->setLastProcessedCommit($lastProcessedHash);
+		$this->repositoryRepository->update($repository);
+		$this->outputLine('-> finished extracting the commits.');
 
 		$this->outputLine('-------------------');
+	}
+
+	/**
+	 * Extracts the commits of a repository, that are not yet extracted and put into the database.
+	 *
+	 * @param \Mrimann\CoMo\Domain\Model\Repository $repository
+	 * @return mixed
+	 */
+	protected function extractCommits(\Mrimann\CoMo\Domain\Model\Repository $repository) {
+		// Fetch all commits since the last run (or full log if nothing done yet)
+		unset($output);
+		$lastProcessedCommit = $repository->getLastProcessedCommit();
+		$logRange = '';
+		if ($lastProcessedCommit != '') {
+			$this->outputLine('-> there are commits already, extracting since ' . substr($lastProcessedCommit, 0, 8));
+			$logRange = $lastProcessedCommit . '..HEAD';
+		}
+		exec('git log ' . $logRange . ' --reverse --pretty="%H__mrX__%ai__mrX__%aE__mrX__%aN__mrX__%cE__mrX__%cN__mrX__%s"', $output);
+
+		// check if there are new commits at all
+		if (count($output) == 0) {
+			$this->outputLine('-> no commits found to extract');
+			return '';
+		}
+
+		// Loop over the single commits and store their data in the database
+		foreach ($output as $line) {
+			$lineParts = explode('__mrX__', $line);
+			$this->outputLine('-> extracting commit ' . substr($lineParts[0], 0, 8));
+
+			$commit = new \Mrimann\CoMo\Domain\Model\Commit();
+			$commit->setHash($lineParts[0]);
+			$date = new \DateTime($lineParts[1]);
+			$commit->setDate($date);
+			$commit->setAuthorEmail($lineParts[2]);
+			$commit->setAuthorName($lineParts[3]);
+			$commit->setCommitterEmail($lineParts[4]);
+			$commit->setCommitterName($lineParts[5]);
+			$commit->setCommitLine($lineParts[6]);
+			$commit->setRepository($repository);
+
+			$this->commitRepository->add($commit);
+			$lastHash = $lineParts[0];
+		}
+
+		return $lastHash;
 	}
 
 	/**

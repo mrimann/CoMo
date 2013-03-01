@@ -85,6 +85,9 @@ class Commit {
 	 */
 	protected $isAggregated;
 
+	public function __construct() {
+		$this->isAggregated = FALSE;
+	}
 
 	/**
 	 * Get the Commit's repository

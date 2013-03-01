@@ -29,6 +29,12 @@ class Repository {
 	protected $url;
 
 	/**
+	 * The last processed Commit
+	 * @var string
+	 */
+	protected $lastProcessedCommit;
+
+	/**
 	 * The is active
 	 * @var boolean
 	 */
@@ -83,6 +89,20 @@ class Repository {
 	 */
 	public function setUrl($url) {
 		$this->url = $url;
+	}
+
+	/**
+	 * @param string $lastProcessedCommit
+	 */
+	public function setLastProcessedCommit($lastProcessedCommit) {
+		$this->lastProcessedCommit = $lastProcessedCommit;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastProcessedCommit() {
+		return $this->lastProcessedCommit;
 	}
 
 	/**
