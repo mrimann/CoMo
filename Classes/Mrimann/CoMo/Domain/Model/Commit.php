@@ -16,6 +16,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Commit {
 
+	const CLASS_UNKNOWN = 'unknown';
+	const CLASS_FEATURE = 'feature';
+	const CLASS_BUGFIX = 'bugfix';
+	const CLASS_TASK = 'task';
+	const CLASS_RELEASE = 'release';
+	const CLASS_TEST = 'test';
+	const CLASS_DOCUMENTATION = 'documentation';
+
 	/**
 	 * The repository
 	 * @var \Mrimann\CoMo\Domain\Model\Repository
@@ -36,16 +44,28 @@ class Commit {
 	protected $commitLine;
 
 	/**
-	 * The author
+	 * The author name
 	 * @var string
 	 */
-	protected $author;
+	protected $authorName;
 
 	/**
-	 * The mail
+	 * The author email
 	 * @var string
 	 */
-	protected $mail;
+	protected $authorEmail;
+
+	/**
+	 * The committer name
+	 * @var string
+	 */
+	protected $committerName;
+
+	/**
+	 * The committer email
+	 * @var string
+	 */
+	protected $committerEmail;
 
 	/**
 	 * The date
@@ -121,6 +141,8 @@ class Commit {
 	 */
 	public function setCommitLine($commitLine) {
 		$this->commitLine = $commitLine;
+
+		$this->setCommitClassFromCommitLine();
 	}
 
 	/**
@@ -128,8 +150,8 @@ class Commit {
 	 *
 	 * @return string The Commit's author
 	 */
-	public function getAuthor() {
-		return $this->author;
+	public function getAuthorName() {
+		return $this->authorName;
 	}
 
 	/**
@@ -138,28 +160,52 @@ class Commit {
 	 * @param string $author The Commit's author
 	 * @return void
 	 */
-	public function setAuthor($author) {
-		$this->author = $author;
+	public function setAuthorName($author) {
+		$this->authorName = $author;
 	}
 
 	/**
-	 * Get the Commit's mail
-	 *
-	 * @return string The Commit's mail
+	 * @param string $authorEmail
 	 */
-	public function getMail() {
-		return $this->mail;
+	public function setAuthorEmail($authorEmail) {
+		$this->authorEmail = $authorEmail;
 	}
 
 	/**
-	 * Sets this Commit's mail
-	 *
-	 * @param string $mail The Commit's mail
-	 * @return void
+	 * @return string
 	 */
-	public function setMail($mail) {
-		$this->mail = $mail;
+	public function getAuthorEmail() {
+		return $this->authorEmail;
 	}
+
+	/**
+	 * @param string $committerEmail
+	 */
+	public function setCommitterEmail($committerEmail) {
+		$this->committerEmail = $committerEmail;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCommitterEmail() {
+		return $this->committerEmail;
+	}
+
+	/**
+	 * @param string $committerName
+	 */
+	public function setCommitterName($committerName) {
+		$this->committerName = $committerName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCommitterName() {
+		return $this->committerName;
+	}
+
 
 	/**
 	 * Get the Commit's date
@@ -197,6 +243,43 @@ class Commit {
 	 */
 	public function setCommitClass($commitClass) {
 		$this->commitClass = $commitClass;
+	}
+
+	protected function setCommitClassFromCommitLine() {
+		if (preg_match('/^(\[)(.*)(\])(.*)/', $this->getCommitLine()) === 0) {
+			$this->setCommitClass(self::CLASS_UNKNOWN);
+		} else {
+			// fiddle out the keyword within the brackets then
+			preg_match_all(
+				'/^(\[)(.*)(\])(.*)/',
+				$this->getCommitLine(),
+				$parts
+			);
+
+			switch (strtolower($parts[2][0])) {
+				case 'task':
+					$class = self::CLASS_TASK;
+					break;
+				case 'bugfix':
+					$class = self::CLASS_BUGFIX;
+					break;
+				case 'feature':
+					$class = self::CLASS_FEATURE;
+					break;
+				case 'release':
+					$class = self::CLASS_RELEASE;
+					break;
+				case 'documentation':
+					$class = self::CLASS_DOCUMENTATION;
+					break;
+				case 'test':
+					$class = self::CLASS_TEST;
+					break;
+				default:
+					$class = self::CLASS_UNKNOWN;
+			}
+			$this->setCommitClass($class);
+		}
 	}
 
 	/**
