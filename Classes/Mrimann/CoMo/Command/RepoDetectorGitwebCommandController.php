@@ -22,6 +22,12 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 	var $repositoryRepository;
 
 	/**
+	 * @var \TYPO3\Flow\Persistence\Doctrine\PersistenceManager
+	 * @Flow\Inject
+	 */
+	var $persistenceManager;
+
+	/**
 	 * The base URL
 	 *
 	 * @var string
@@ -88,6 +94,8 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 				$this->outputLine('-| skipped repository "%s" - exists already', array($repoUrl));
 			}
 		}
+
+		$this->persistenceManager->persistAll();
 
 		// show some summary output
 		$this->outputLine('Added %d new repositories, skipped %d repositories.', array($addedCount, $skippedCount));
