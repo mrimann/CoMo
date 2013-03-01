@@ -89,6 +89,16 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 				$this->outputLine('-| skipped repository "%s" - exists already', array($repoUrl));
 			}
 		}
+
+		// show some summary output
+		$this->outputLine('Added %d new repositories, skipped %d repositories.', array($addedCount, $skippedCount));
+		$this->outputLine(
+			'Now having a total of %d repositories in the system of which %d are marked active to be checked.',
+			array(
+				$this->repositoryRepository->countAll(),
+				$this->repositoryRepository->countByIsActive(TRUE)
+			)
+		);
 	}
 
 	/**
