@@ -1,1 +1,25 @@
-{"name":"mrimann\/como","type":"typo3-flow-package","description":"","require":{"typo3\/flow":"*"},"autoload":{"psr-0":{"Mrimann\\CoMo":"Classes"}}}
+{
+	"name": "mrimann/como",
+	"type": "typo3-flow-package",
+	"description": "foo",
+	"keywords": [
+		"Git", "Team", "Challenge", "Gamification", "Radiator", "Game", "Coder", "TYPO3 Flow", "TYPO3 Neos"
+	],
+	"license": "MIT",
+	"authors" : [
+		{
+			"name": "Mario Rimann",
+			"email": "mario.rimann@typo3.org",
+			"homepage": "http://rimann.org/"
+		}
+	],
+	"require": {
+		"typo3/flow": "*",
+		"typo3/twitter-bootstrap": "*"
+	},
+	"autoload": {
+		"psr-0": {
+			"Mrimann\\CoMo": "Classes"
+		}
+	}
+}
