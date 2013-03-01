@@ -44,9 +44,38 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 	 */
 	protected function processSingleRepository(\Mrimann\CoMo\Domain\Model\Repository $repository) {
 		$workingDirectory = $this->getCachePath($repository);
-		$this->outputLine('Working directory is: ' . $workingDirectory);
+		$this->outputLine('-> working directory is: ' . $workingDirectory);
 
-		
+		$this->prepareCachedClone($repository, $workingDirectory);
+		$this->outputLine('-> cached clone is read to rumble...');
+
+		$this->outputLine('-------------------');
+	}
+
+	/**
+	 * Checks if the given repository has already been cloned to it's temporary cache directory.
+	 * If it is, the clone is updated by pulling in all changes from the source URL, otherwise
+	 * the source repository is cloned to the directory.
+	 *
+	 * @param \Mrimann\CoMo\Domain\Model\Repository $repository
+	 * @param $workingDirectory
+	 */
+	protected function prepareCachedClone(\Mrimann\CoMo\Domain\Model\Repository $repository, $workingDirectory) {
+		// If working directory does not exist, create it by cloning repository into it
+		// and then change into that directory
+		if (!is_dir($workingDirectory . '/.git')) {
+			$this->outputLine($workingDirectory);
+			chdir($workingDirectory);
+			$this->outputLine('Created directory, going to clone now...');
+			exec('git clone ' . $repository->getUrl() . ' .');
+			$this->outputLine('Finished cloning from ' . $repository->getUrl());
+		} else {
+			chdir($workingDirectory);
+			// If there's a clone alredy, just pull the latest changes from the origin
+			$this->outputLine('going to pull changes from remote repo...');
+			exec ('git pull');
+			$this->outputLine('finished pulling changes.');
+		}
 	}
 
 	/**
