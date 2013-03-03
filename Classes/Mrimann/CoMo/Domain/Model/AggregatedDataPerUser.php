@@ -17,10 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class AggregatedDataPerUser {
 
 	/**
-	 * The user
+	 * The user email
 	 * @var string
 	 */
-	protected $user;
+	protected $userEmail;
+
+	/**
+	 * The user name
+	 * @var string
+	 */
+	protected $userName;
 
 	/**
 	 * The month
@@ -86,8 +92,8 @@ class AggregatedDataPerUser {
 	 *
 	 * @return string The Aggregated data per user's user
 	 */
-	public function getUser() {
-		return $this->user;
+	public function getUserEmail() {
+		return $this->userEmail;
 	}
 
 	/**
@@ -96,8 +102,22 @@ class AggregatedDataPerUser {
 	 * @param string $user The Aggregated data per user's user
 	 * @return void
 	 */
-	public function setUser($user) {
-		$this->user = $user;
+	public function setUserEmail($user) {
+		$this->userEmail = $user;
+	}
+
+	/**
+	 * @param string $userName
+	 */
+	public function setUserName($userName) {
+		$this->userName = $userName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUserName() {
+		return $this->userName;
 	}
 
 	/**
