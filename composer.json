@@ -1,7 +1,7 @@
 {
 	"name": "mrimann/como",
 	"type": "typo3-flow-package",
-	"description": "foo",
+	"description": "Tool to automatically elect the Coder of the Month based on the Git commits within your team.",
 	"keywords": [
 		"Git", "Team", "Challenge", "Gamification", "Radiator", "Game", "Coder", "TYPO3 Flow", "TYPO3 Neos"
 	],
