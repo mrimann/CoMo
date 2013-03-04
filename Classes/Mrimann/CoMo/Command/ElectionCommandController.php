@@ -40,6 +40,12 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 		$this->outputLine('Getting the awards for ' . $monthIdentifier);
 
+		// first check if there is an award stored already
+		if ($this->awardRepository->findByMonthAndType($monthIdentifier, 'committerOfTheMonth')->count()) {
+			$this->outputLine('This award has been given already.');
+			return;
+		}
+
 		$hits = $this->electomat->getAwardsForMonth($monthIdentifier);
 
 		if ($hits->count() === 0) {
