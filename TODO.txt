@@ -1,4 +1,4 @@
-- lokale Git-Repo-URLs erkennen, keinen Clone ausführen + direkt drauf zugreifen
+- just index the master branch
 
 - upcoming awards
 	- trend of the user (+/-) compared to last month
