@@ -1,9 +1,13 @@
+{namespace bootstrap=TYPO3\Twitter\Bootstrap\ViewHelpers}
+
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
 		<title><f:render section="Title" /></title>
 		<f:base />
+
+		<bootstrap:include />
 	</head>
 	<body>
 		<f:flashMessages class="flashmessages" />

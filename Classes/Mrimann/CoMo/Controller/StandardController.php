@@ -9,11 +9,17 @@ namespace Mrimann\CoMo\Controller;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * Standard controller for the Mrimann.CoMo package 
+ * Standard controller for the Mrimann.CoMo package
  *
  * @Flow\Scope("singleton")
  */
 class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
+
+	/**
+	 * @var \Mrimann\CoMo\Domain\Repository\AwardRepository
+	 * @Flow\Inject
+	 */
+	var $awardRepository;
 
 	/**
 	 * Index action
@@ -21,9 +27,10 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	 * @return void
 	 */
 	public function indexAction() {
-		$this->view->assign('foos', array(
-			'bar', 'baz'
-		));
+		$this->view->assign(
+			'awards',
+			$this->awardRepository->findAll()
+		);
 	}
 
 }

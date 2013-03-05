@@ -1,15 +1,17 @@
+{namespace como=Mrimann\CoMo\ViewHelpers}
 <f:layout name="Default" />
 
 <f:section name="Title">Index view of Standard controller</f:section>
 
 <f:section name="Content">
-	<h1>A freshly created Fluid template!</h1>
-	<p>Some data set by the controller:</p>
 	<ul>
-		
-		<f:for each="{foos}" as="foo">
-			<li>{foo}</li>
+
+		<f:for each="{awards}" as="award">
+			<li>
+				{award.userName}<br />
+				<como:gravatar email="{award.userEmail}" size="190" />
+			</li>
 		</f:for>
-		
+
 	</ul>
 </f:section>
