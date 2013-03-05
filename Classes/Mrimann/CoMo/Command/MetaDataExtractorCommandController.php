@@ -56,8 +56,10 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 		$this->outputLine('-> cached clone is ready to rumble...');
 
 		$lastProcessedHash = $this->extractCommits($repository);
-		$repository->setLastProcessedCommit($lastProcessedHash);
-		$this->repositoryRepository->update($repository);
+		if ($lastProcessedHash != '') {
+			$repository->setLastProcessedCommit($lastProcessedHash);
+			$this->repositoryRepository->update($repository);
+		}
 		$this->outputLine('-> finished extracting the commits.');
 
 		$this->outputLine('-------------------');
