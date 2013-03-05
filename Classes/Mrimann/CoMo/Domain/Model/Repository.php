@@ -125,5 +125,19 @@ class Repository {
 		$this->isActive = $isActive;
 	}
 
+	/**
+	 * Checks if the repo is locally accessible (e.g. on the same server or on a
+	 * mounted remote filesystem).
+	 *
+	 * @return boolean true if the URL of the repo is locally, false otherwise
+	 */
+	public function isLocalRepository() {
+		if (substr($this->getUrl(), 0, 7) == 'file://') {
+			return true;
+		}
+
+		return false;
+	}
+
 }
 ?>

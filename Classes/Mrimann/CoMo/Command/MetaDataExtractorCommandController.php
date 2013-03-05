@@ -49,6 +49,7 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 	 * @param \Mrimann\CoMo\Domain\Model\Repository $repository
 	 */
 	protected function processSingleRepository(\Mrimann\CoMo\Domain\Model\Repository $repository) {
+		// prepare local cached clone for remote repositories
 		$workingDirectory = $this->getCachePath($repository);
 		$this->outputLine('-> working directory is: ' . $workingDirectory);
 
@@ -75,12 +76,19 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 		// Fetch all commits since the last run (or full log if nothing done yet)
 		unset($output);
 		$lastProcessedCommit = $repository->getLastProcessedCommit();
+
+		// use the --git-dir parameter for git log in case it's a local repository
+		$gitDirectory = '';
+		if ($repository->isLocalRepository()) {
+			$gitDirectory = '--git-dir ' . substr(substr($repository->getUrl(),7), 0, -4) . '/.git';
+		}
+
 		$logRange = '';
 		if ($lastProcessedCommit != '') {
 			$this->outputLine('-> there are commits already, extracting since ' . substr($lastProcessedCommit, 0, 8));
 			$logRange = $lastProcessedCommit . '..HEAD';
 		}
-		exec('git log ' . $logRange . ' --reverse --pretty="%H__mrX__%ai__mrX__%aE__mrX__%aN__mrX__%cE__mrX__%cN__mrX__%s"', $output);
+		exec('git ' . $gitDirectory . ' log ' . $logRange . ' --reverse --pretty="%H__mrX__%ai__mrX__%aE__mrX__%aN__mrX__%cE__mrX__%cN__mrX__%s"', $output);
 
 		// check if there are new commits at all
 		if (count($output) == 0) {
@@ -120,21 +128,26 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 	 * @param $workingDirectory
 	 */
 	protected function prepareCachedClone(\Mrimann\CoMo\Domain\Model\Repository $repository, $workingDirectory) {
-		// If working directory does not exist, create it by cloning repository into it
-		// and then change into that directory
-		if (!is_dir($workingDirectory . '/.git')) {
-			$this->outputLine($workingDirectory);
-			chdir($workingDirectory);
-			$this->outputLine('Created directory, going to clone now...');
-			exec('git clone ' . $repository->getUrl() . ' .');
-			$this->outputLine('Finished cloning from ' . $repository->getUrl());
+		if ($repository->isLocalRepository()) {
+			$this->outputLine('-> OK, a local repository - just changing to that dir, no clone or pulling needed.');
 		} else {
-			chdir($workingDirectory);
-			// If there's a clone alredy, just pull the latest changes from the origin
-			$this->outputLine('going to pull changes from remote repo...');
-			exec ('git pull');
-			$this->outputLine('finished pulling changes.');
+			// If working directory does not exist, create it by cloning repository into it
+			// and then change into that directory
+			if (!is_dir($workingDirectory . '/.git')) {
+				$this->outputLine($workingDirectory);
+				chdir($workingDirectory);
+				$this->outputLine('Created directory, going to clone now...');
+				exec('git clone ' . $repository->getUrl() . ' .');
+				$this->outputLine('Finished cloning from ' . $repository->getUrl());
+			} else {
+				chdir($workingDirectory);
+				// If there's a clone alredy, just pull the latest changes from the origin
+				$this->outputLine('going to pull changes from remote repo...');
+				exec ('git pull');
+				$this->outputLine('finished pulling changes.');
+			}
 		}
+
 	}
 
 	/**

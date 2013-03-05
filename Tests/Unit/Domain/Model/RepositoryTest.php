@@ -27,6 +27,36 @@ class RepositoryTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	/**
 	 * @test
 	 */
+	public function isLocalRepositoryReturnsTrueWithLocalUrl() {
+		$this->fixture->setUrl('file:///foo/bar.git');
+		$this->assertTrue(
+			$this->fixture->isLocalRepository()
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function isLocalRepositoryReturnsFalseWithRemoteSshUrl() {
+		$this->fixture->setUrl('ssh://git@git.foobar.ch/baz.git');
+		$this->assertFalse(
+			$this->fixture->isLocalRepository()
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function isLocalRepositoryReturnsFalseWithRemoteHttpsUrl() {
+		$this->fixture->setUrl('https://git.foobar.ch/baz.git');
+		$this->assertFalse(
+			$this->fixture->isLocalRepository()
+		);
+	}
+
+	/**
+	 * @test
+	 */
 	public function setUrlSetsUrl() {
 		$this->fixture->setUrl('http://foo/bar.git');
 		$this->assertEquals(
