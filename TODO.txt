@@ -1,6 +1,0 @@
-- just index the master branch
-
-- upcoming awards
-	- trend of the user (+/-) compared to last month
-
-- most active repo erküren -> aggregatedDataPerRepo
