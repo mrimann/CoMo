@@ -56,5 +56,38 @@ class AwardRepository extends \TYPO3\Flow\Persistence\Repository {
 
 		return $query->execute();
 	}
+
+	/**
+	 * Finds the topic awards (everything that is not the basic committer of the month award)
+	 * for the current month.
+	 *
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
+	 */
+	public function findCurrentTopicAwards() {
+		$query = $this->createQuery();
+		$query->matching(
+			$query->logicalAnd(
+				$query->equals('month', $this->getMonthIdentifierLastMonth()),
+				$query->logicalNot(
+					$query->equals('type', 'committerOfTheMonth')
+				)
+			)
+		);
+
+		return $query->execute();
+	}
+
+	/**
+	 * Creates the identifier for last month in the format "YYYY-MM".
+	 *
+	 * TODO: Refactor this one to be in the electomatService if possible
+	 * @return string the month identifier
+	 */
+	protected function getMonthIdentifierLastMonth() {
+		$date = mktime(1, 1, 1, date('m') - 1, 1, date('Y'));
+		$month = new \DateTime('@' . $date);
+
+		return $month->format('Y-m');
+	}
 }
 ?>

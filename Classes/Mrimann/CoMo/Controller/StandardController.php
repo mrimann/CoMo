@@ -31,6 +31,10 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 			'coderOfTheMonthAwards',
 			$this->awardRepository->findLatestAwards(4)
 		);
+
+		$this->view->assign(
+			'currentTopicAwards',
+			$this->awardRepository->findCurrentTopicAwards()
 		);
 	}
 

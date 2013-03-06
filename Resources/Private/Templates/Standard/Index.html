@@ -5,6 +5,7 @@
 <f:section name="Content">
 	<div class="row-fluid">
 		<div class="span8">
+			<div class="row-fluid">
 			<f:for each="{coderOfTheMonthAwards}" as="award">
 				<f:if condition="{coderOfTheMonthAwards.first} == {award}">
 					<f:then>
@@ -17,7 +18,14 @@
 					</f:else>
 				</f:if>
 			</f:for>
-
+			</div>
+			<div class="row-fluid">
+				<f:for each="{currentTopicAwards}" as="topicAward">
+					<div class="span2">
+						<f:render partial="TopicAward" arguments="{award: topicAward, size: 100}" />
+					</div>
+				</f:for>
+			</div>
 		</div>
 		<div class="span4">
 			bar

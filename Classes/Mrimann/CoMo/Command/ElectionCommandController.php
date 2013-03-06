@@ -56,6 +56,7 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 	/**
 	 * Creates the identifier for last month in the format "YYYY-MM".
 	 *
+	 * TODO: Refactor this one to be in the electomatService if possible
 	 * @return string the month identifier
 	 */
 	protected function getMonthIdentifierLastMonth() {
