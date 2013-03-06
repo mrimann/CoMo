@@ -28,8 +28,9 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	 */
 	public function indexAction() {
 		$this->view->assign(
-			'awards',
-			$this->awardRepository->findAll()
+			'coderOfTheMonthAwards',
+			$this->awardRepository->findLatestAwards(4)
+		);
 		);
 	}
 

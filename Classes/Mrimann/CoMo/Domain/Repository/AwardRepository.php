@@ -34,5 +34,27 @@ class AwardRepository extends \TYPO3\Flow\Persistence\Repository {
 
 		return $query->execute();
 	}
+
+	/**
+	 * Finds the latest n committerOftheMonth awards, ordered by
+	 * the month (newest first)
+	 *
+	 * @param integer the limit of awards to select
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
+	 */
+	public function findLatestAwards($limit = 3) {
+		$query = $this->createQuery();
+		$query->matching(
+			$query->equals('type', 'committerOfTheMonth')
+		);
+		$query->setLimit($limit);
+		$query->setOrderings(
+			array(
+				'month' => 'DESC'
+			)
+		);
+
+		return $query->execute();
+	}
 }
 ?>

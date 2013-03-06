@@ -1,17 +1,26 @@
-{namespace como=Mrimann\CoMo\ViewHelpers}
-<f:layout name="Default" />
+<f:layout name="Default"/>
 
-<f:section name="Title">Index view of Standard controller</f:section>
+<f:section name="Title">Coder of The Month</f:section>
 
 <f:section name="Content">
-	<ul>
+	<div class="row-fluid">
+		<div class="span8">
+			<f:for each="{coderOfTheMonthAwards}" as="award">
+				<f:if condition="{coderOfTheMonthAwards.first} == {award}">
+					<f:then>
+						<f:render partial="Award" arguments="{award: award, class: 'current', size: 400}" />
+					</f:then>
+					<f:else>
+						<div class="span2">
+							<f:render partial="Award" arguments="{award: award, class: '', size: 150}" />
+						</div>
+					</f:else>
+				</f:if>
+			</f:for>
 
-		<f:for each="{awards}" as="award">
-			<li>
-				{award.userName}<br />
-				<como:gravatar email="{award.userEmail}" size="190" />
-			</li>
-		</f:for>
-
-	</ul>
+		</div>
+		<div class="span4">
+			bar
+		</div>
+	</div>
 </f:section>
