@@ -76,6 +76,12 @@ class AggregatedDataPerUser {
 	 */
 	protected $commitCountRelease;
 
+	/**
+	 * The commit count release
+	 * @var integer
+	 */
+	protected $commitCountUnknown;
+
 
 	public function __construct() {
 		$this->commitCount = 0;
@@ -85,6 +91,7 @@ class AggregatedDataPerUser {
 		$this->commitCountRelease = 0;
 		$this->commitCountTask = 0;
 		$this->commitCountTest = 0;
+		$this->commitCountUnknown = 0;
 	}
 
 	/**
@@ -273,6 +280,20 @@ class AggregatedDataPerUser {
 	}
 
 	/**
+	 * @param int $commitCountUnknown
+	 */
+	public function setCommitCountUnknown($commitCountUnknown) {
+		$this->commitCountUnknown = $commitCountUnknown;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCommitCountUnknown() {
+		return $this->commitCountUnknown;
+	}
+
+	/**
 	 * Adds a given commit (without further checking). Adding in this case means that some counters
 	 * in this object are raised - depending on some properties of the commit.
 	 *
@@ -280,7 +301,35 @@ class AggregatedDataPerUser {
 	 * @return void
 	 */
 	public function addCommit(\Mrimann\CoMo\Domain\Model\Commit $commit){
+		// Update the generic commit counter
 		$this->commitCount++;
+
+		// Update the topic commit counter, depending on the commit class of the commit
+		switch ($commit->getCommitClass()) {
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_FEATURE:
+				$this->commitCountFeature++;
+				break;
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_RELEASE:
+				$this->commitCountRelease++;
+				break;
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_DOCUMENTATION:
+				$this->commitCountDocumentation++;
+				break;
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_TASK:
+				$this->commitCountTask++;
+				break;
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_BUGFIX:
+				$this->commitCountBugfix++;
+				break;
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_TEST:
+				$this->commitCountTest++;
+				break;
+			case \Mrimann\CoMo\Domain\Model\Commit::CLASS_UNKNOWN:
+				// fallthrough intended!
+			default:
+				$this->commitCountUnknown++;
+				break;
+		}
 	}
 
 }
