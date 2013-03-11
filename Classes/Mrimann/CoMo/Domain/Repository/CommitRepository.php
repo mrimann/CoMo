@@ -15,7 +15,19 @@ use TYPO3\Flow\Annotations as Flow;
  */
 class CommitRepository extends \TYPO3\Flow\Persistence\Repository {
 
-	// add customized methods here
+	/**
+	 * Returns the commits of a given month
+	 *
+	 * @param string the month identifier
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
+	 */
+	public function getCommitsByMonth($month) {
+		$query = $this->createQuery();
+		$query->matching(
+			$query->like('date', $month . '%')
+		);
 
+		return $query->execute();
+	}
 }
 ?>
