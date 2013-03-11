@@ -20,12 +20,22 @@ class ElectomatService {
 	var $aggregatedDataPerUserRepository;
 
 	/**
+	 * Returns the best ranked committers (overall commit count)
 	 *
 	 * @param string the month-identifier
 	 */
 	public function getAwardsForMonth($month) {
 		return $this->aggregatedDataPerUserRepository->findBestRankedForMonth($month);
+	}
 
+	/**
+	 * Returns the best ranked committers for a given topic and month
+	 *
+	 * @param string the topic
+	 * @param string the month identifier
+	 */
+	public function getTopicAwardsForMonth($topic, $month) {
+		return $this->aggregatedDataPerUserRepository->findBestRankedForTopicAndMonth($topic, $month);
 	}
 }
 ?>

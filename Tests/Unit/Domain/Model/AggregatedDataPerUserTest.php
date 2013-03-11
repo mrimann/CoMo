@@ -118,5 +118,47 @@ class AggregatedDataPerUserTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			$this->fixture->getCommitCountUnknown()
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function getCommitCountWithoutTypeReturnsOverallCommitCount() {
+		$commit = new \Mrimann\CoMo\Domain\Model\Commit();
+		$commit->setCommitLine('[BUGFIX] foo bar');
+		$this->fixture->addCommit($commit);
+
+		$this->assertEquals(
+			1,
+			$this->fixture->getCommitCountByType()
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function getCommitCountWithTypeReturnsTopicCommitCount() {
+		$commit = new \Mrimann\CoMo\Domain\Model\Commit();
+		$commit->setCommitLine('[BUGFIX] foo bar');
+		$this->fixture->addCommit($commit);
+
+		$this->assertEquals(
+			1,
+			$this->fixture->getCommitCountByType('bugfix')
+		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function getCommitCountWithTypeDoesNotReturnWrongTopicCommitCount() {
+		$commit = new \Mrimann\CoMo\Domain\Model\Commit();
+		$commit->setCommitLine('[BUGFIX] foo bar');
+		$this->fixture->addCommit($commit);
+
+		$this->assertEquals(
+			0,
+			$this->fixture->getCommitCountByType('feature')
+		);
+	}
 }
 ?>

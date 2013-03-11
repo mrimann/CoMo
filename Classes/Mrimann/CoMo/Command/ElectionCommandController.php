@@ -44,13 +44,29 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 		$this->outputLine('Getting the awards for ' . $monthIdentifier);
 
+		// elect the global committer of the month award
 		if ($this->canAwardBeElected('committerOfTheMonth', $monthIdentifier) === TRUE) {
-			$this->showTopRankingAndAnnouncement();
+			$this->showTopRankingAndAnnouncement('committerOfTheMonth');
 			$this->createNewAward('committerOfTheMonth', $monthIdentifier, $this->topCommitters->getFirst());
-		} else {
-			return;
 		}
 
+		// elect the topic awards
+		$topicAwardTypes = array(
+			'feature',
+			'bugfix',
+			'task',
+			'documentation',
+			'test',
+			'release'
+		);
+		foreach ($topicAwardTypes as $awardType) {
+			unset($this->topCommitters);
+
+			if ($this->canAwardBeElected($awardType, $monthIdentifier)) {
+				$this->showTopRankingAndAnnouncement($awardType);
+				$this->createNewAward($awardType, $monthIdentifier, $this->topCommitters->getFirst());
+			}
+		}
 	}
 
 	/**
@@ -77,6 +93,14 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @return boolean true if the award can be elected, false otherwise
 	 */
 	protected function canAwardBeElected($type, $monthIdentifier) {
+		$this->outputLine(
+			'Checking the "%s" award for month %s:',
+			array(
+				$type,
+				$monthIdentifier
+			)
+		);
+
 		// first check if there is an award stored already
 		if ($this->awardRepository->findByMonthAndType($monthIdentifier, $type)->count()) {
 			$this->outputLine('This award has been given already.');
@@ -84,7 +108,11 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 		}
 
 		// check if we have data for this month at all
-		$this->topCommitters = $this->electomat->getAwardsForMonth($monthIdentifier);
+		if ($type == 'committerOfTheMonth') {
+			$this->topCommitters = $this->electomat->getAwardsForMonth($monthIdentifier);
+		} else {
+			$this->topCommitters = $this->electomat->getTopicAwardsForMonth($type, $monthIdentifier);
+		}
 
 		if ($this->topCommitters->count() === 0) {
 			$this->outputLine('Nothing found to elect on, sorry...');
@@ -99,14 +127,16 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 *
 	 * This is solely for the CLI output - does no data manipulation.
 	 *
+	 * @param string the type of the award
+	 *
 	 * @return void
 	 */
-	protected function showTopRankingAndAnnouncement() {
+	protected function showTopRankingAndAnnouncement($type) {
 		foreach ($this->topCommitters as $topCommitter) {
 			$this->outputLine(
 				'%d commits from %s <%s>',
 				array(
-					$topCommitter->getCommitCount(),
+					$topCommitter->getCommitCountByType($type),
 					$topCommitter->getUserName(),
 					$topCommitter->getUserEmail()
 				)
@@ -118,7 +148,7 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 			array(
 				$this->topCommitters->getFirst()->getUserName(),
 				$this->topCommitters->getFirst()->getUserEmail(),
-				$this->topCommitters->getFirst()->getCommitCount()
+				$this->topCommitters->getFirst()->getCommitCountByType($type)
 			)
 		);
 	}
@@ -136,7 +166,7 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 		$award->setUserName($winner->getUserName());
 		$award->setType($type);
 		$award->setMonth($monthIdentifier);
-		$award->setCommitCount($winner->getCommitCount());
+		$award->setCommitCount($winner->getCommitCountByType($type));
 		$this->awardRepository->add($award);
 	}
 }

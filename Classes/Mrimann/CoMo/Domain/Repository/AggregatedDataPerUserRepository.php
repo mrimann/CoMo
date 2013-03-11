@@ -75,5 +75,30 @@ class AggregatedDataPerUserRepository extends \TYPO3\Flow\Persistence\Repository
 		return $query->execute();
 	}
 
+	/**
+	 * Finds the 10 best ranked committer (most commits in the given month)
+	 *
+	 * @param string the month-identifier
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
+	 */
+	public function findBestRankedForTopicAndMonth($topic, $month) {
+		$relevantColumn = 'commitCount' . ucfirst($topic);
+
+		$query = $this->createQuery();
+		$query->matching(
+			$query->logicalAnd(
+				$query->equals('month', $month),
+				$query->greaterThan($relevantColumn, 0)
+			)
+		);
+		$query->setLimit(10);
+		$query->setOrderings(
+			array(
+				$relevantColumn => 'DESC'
+			)
+		);
+
+		return $query->execute();
+	}
 }
 ?>

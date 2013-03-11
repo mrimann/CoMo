@@ -294,6 +294,44 @@ class AggregatedDataPerUser {
 	}
 
 	/**
+	 * Returns the commit count for a given type of commits
+	 *
+	 * @param string the type, optional (returns the overall count if not given)
+	 * @return int the commit count
+	 */
+	public function getCommitCountByType($type = '') {
+		if ($type == '' || $type == 'committerOfTheMonth') {
+			$result = $this->getCommitCount();
+		}
+
+		switch ($type) {
+			case 'bugfix':
+				$result = $this->getCommitCountBugfix();
+				break;
+			case 'feature':
+				$result = $this->getCommitCountFeature();
+				break;
+			case 'test':
+				$result = $this->getCommitCountTest();
+				break;
+			case 'documentation':
+				$result = $this->getCommitCountDocumentation();
+				break;
+			case 'release':
+				$result = $this->getCommitCountRelease();
+				break;
+			case 'task':
+				$result = $this->getCommitCountTask();
+				break;
+			case 'unknown':
+				$result = $this->getCommitCountUnknown();
+				break;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Adds a given commit (without further checking). Adding in this case means that some counters
 	 * in this object are raised - depending on some properties of the commit.
 	 *
