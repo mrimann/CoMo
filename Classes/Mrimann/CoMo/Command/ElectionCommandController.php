@@ -136,6 +136,7 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 		$award->setUserName($winner->getUserName());
 		$award->setType($type);
 		$award->setMonth($monthIdentifier);
+		$award->setCommitCount($winner->getCommitCount());
 		$this->awardRepository->add($award);
 	}
 }

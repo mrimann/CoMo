@@ -70,5 +70,17 @@ class AwardTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			'foo@bar.tld'
 		);
 	}
+
+	/**
+	 * @test
+	 */
+	public function setCommitCountSetsCommitCount() {
+		$this->fixture->setCommitCount(42);
+
+		$this->assertEquals(
+			42,
+			$this->fixture->getCommitCount()
+		);
+	}
 }
 ?>

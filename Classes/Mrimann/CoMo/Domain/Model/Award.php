@@ -40,6 +40,13 @@ class Award {
 	 */
 	protected $userEmail;
 
+	/**
+	 * The commit count
+	 *
+	 * @var integer
+	 */
+	protected $commitCount;
+
 
 	/**
 	 * Get the Award's type
@@ -117,5 +124,18 @@ class Award {
 		$this->userEmail = $userEmail;
 	}
 
+	/**
+	 * @param int $commitCount
+	 */
+	public function setCommitCount($commitCount) {
+		$this->commitCount = $commitCount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCommitCount() {
+		return $this->commitCount;
+	}
 }
 ?>
