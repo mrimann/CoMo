@@ -1,3 +1,10 @@
 Mrimann:
   CoMo:
     cacheBasePath: %FLOW_PATH_DATA%Temporary/
+
+    # defines the amount of days that will be extracted from the git log
+    # as it wouldn't make sense to fetch e.g. the last 10 years and spend
+    # tons of resources on extracting and aggregating - and then just
+    # electing last month's awards
+    # defaults to 100 days - which is roughly 3 months
+    maxDaysToFetchFromGitLogHistory: 100

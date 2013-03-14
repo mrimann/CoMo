@@ -87,6 +87,19 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 		if ($lastProcessedCommit != '') {
 			$this->outputLine('-> there are commits already, extracting since ' . substr($lastProcessedCommit, 0, 8));
 			$logRange = $lastProcessedCommit . '..HEAD';
+		} else {
+			// check if there's a limit of days to fetch the history from the git log
+			if (isset($this->settings['maxDaysToFetchFromGitLogHistory'])
+				&& $this->settings['maxDaysToFetchFromGitLogHistory'] > 0) {
+				$this->outputLine(
+					'-> Limit of max %d days to fetch is in effect, nothing older than that will be extracted',
+					array(
+						$this->settings['maxDaysToFetchFromGitLogHistory']
+					)
+				);
+				$oldestDate = new \DateTime('now -' . $this->settings['maxDaysToFetchFromGitLogHistory'] . ' days');
+				$logRange = '--since ' . $oldestDate->format('Y-m-d');
+			}
 		}
 		exec('git ' . $gitDirectory . ' log ' . $logRange . ' --reverse --pretty="%H__mrX__%ai__mrX__%aE__mrX__%aN__mrX__%cE__mrX__%cN__mrX__%s"', $output);
 
