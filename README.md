@@ -8,6 +8,20 @@ The stats can be integrated in a radiator screen within one's office to publicly
 
 But it goes even further: There's a command controller that can be run e.g. once a day to fetch a list of all repositories from a remote server via the Gitweb frontend. This eases it a lot for us as newly added repositories will be detected automatically by CoMo.
 
+## Features
+
+- Automatically fetch a list of repositories from a Gitweb-Frontend
+- Possibility to automatically detect new repositories as soon as they get added on the Git server (via Gitweb-Frontend)
+- Extracts the commit's meta-data for each repository
+	- only extracts the latest n days to save resources (configurable)
+	- only extracts stuff that hasn't been extracted yet (e.g. the new commits since the last extraction run)
+- Aggregates the extracted data
+- Automatically elects the winners based on the aggregated data
+- Everything can be automated via cronjobs
+	- cronjobs are built in a way that they can be fired regularly and will just exit as soon as nothing is to do
+- Shows several big-screen optimized views:
+	- the last month's winner(s)
+
 ## Configuration options
 
 - maxDaysToFetchFromGitLogHistory: 100
