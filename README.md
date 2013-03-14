@@ -10,6 +10,10 @@ But it goes even further: There's a command controller that can be run e.g. once
 
 ## Configuration options
 
+- maxDaysToFetchFromGitLogHistory: 100
+
+	Defines how far back in the git log we're going to extract the commits (to avoid extracting and aggregating data for e.g. 10 years of commits and then just electing the award for the last month or so).
+
 - cacheBasePath: %FLOW_PATH_DATA%Temporary/
 
 	Sets the base directory to be used for the local cloning of the remote repositories before the data can be extracted.
