@@ -13,7 +13,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandController {
+class RepoDetectorGitwebCommandController extends BaseCommandController {
 
 	/**
 	 * @var \Mrimann\CoMo\Domain\Repository\RepositoryRepository
@@ -46,9 +46,12 @@ class RepoDetectorGitwebCommandController extends \TYPO3\Flow\Cli\CommandControl
 	 *
 	 * @param string $url The URL to Gitweb
 	 * @param string $baseUrl The base URL that is put in front of the single repo's path
+	 * @param boolean whether the script should avoid any output
 	 * @return void
 	 */
-	public function fetchReposCommand($url, $baseUrl) {
+	public function fetchReposCommand($url, $baseUrl, $quiet = FALSE) {
+		$this->quiet = $quiet;
+
 		$url = $url . '?a=project_index';
 		if (!@fopen($url, r)) {
 			throw new \TYPO3\Flow\Exception(
