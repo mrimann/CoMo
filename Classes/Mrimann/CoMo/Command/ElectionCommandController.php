@@ -13,7 +13,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
+class ElectionCommandController extends BaseCommandController {
 
 	/**
 	 * @var \Mrimann\CoMo\Services\ElectomatService
@@ -37,9 +37,12 @@ class ElectionCommandController extends \TYPO3\Flow\Cli\CommandController {
 	/**
 	 * Runs the election for the last month.
 	 *
+	 * @param boolean whether the script should avoid any output
 	 * @return void
 	 */
-	public function electLastMonthCommand() {
+	public function electLastMonthCommand($quiet = FALSE) {
+		$this->quiet = $quiet;
+
 		$monthIdentifier = $this->getMonthIdentifierLastMonth();
 
 		$this->outputLine('Getting the awards for ' . $monthIdentifier);
