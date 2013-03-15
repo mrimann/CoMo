@@ -13,7 +13,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class DataAggregatorCommandController extends \TYPO3\Flow\Cli\CommandController {
+class DataAggregatorCommandController extends BaseCommandController {
 
 	/**
 	 * @var \Mrimann\CoMo\Domain\Repository\CommitRepository
@@ -31,12 +31,15 @@ class DataAggregatorCommandController extends \TYPO3\Flow\Cli\CommandController 
 	 * Processes the cached meta data and aggregates it to a usable format so they can be used easily
 	 * for showing some results.
 	 *
+	 * @param boolean whether the script should avoid any output
 	 * @return void
 	 */
-	public function processCommitsCommand() {
+	public function processCommitsCommand($quiet = FALSE) {
+		$this->quiet = $quiet;
+
 		$unprocessedCommits = $this->commitRepository->findByIsAggregated(FALSE);
 
-		if ($unprocessedCommits === NULL) {
+		if ($unprocessedCommits->count() == 0) {
 			$this->outputLine('There are no commits to be processed.');
 			return;
 		}
@@ -46,6 +49,8 @@ class DataAggregatorCommandController extends \TYPO3\Flow\Cli\CommandController 
 			$commit->setIsAggregated(TRUE);
 			$this->commitRepository->update($commit);
 		}
+
+		$this->outputLine('-> aggregated ' . count($unprocessedCommits) . ' commits.');
 
 	}
 
