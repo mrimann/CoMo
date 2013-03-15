@@ -13,7 +13,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandController {
+class MetaDataExtractorCommandController extends BaseCommandController {
 	/**
 	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
 	 * @Flow\Inject
@@ -35,9 +35,12 @@ class MetaDataExtractorCommandController extends \TYPO3\Flow\Cli\CommandControll
 	/**
 	 * Extracts meta data from the commits of a repository
 	 *
+	 * @param boolean whether the script should avoid any output
 	 * @return void
 	 */
-	public function processRepositoriesCommand() {
+	public function processRepositoriesCommand($quiet = FALSE) {
+		$this->quiet = $quiet;
+
 		$repositories = $this->repositoryRepository->findByIsActive(TRUE);
 		foreach ($repositories as $repository) {
 			$this->outputLine('Going to process repository at %s', array($repository->getUrl()));
