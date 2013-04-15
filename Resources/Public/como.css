@@ -17,11 +17,11 @@ body {
     width: 600px;
     text-align: center; }
     body .current img {
-      width: 300px;
-      height: 300px;
-      border-radius: 150px;
-      -webkit-border-radius: 150px;
-      -moz-border-radius: 150px;
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;
+      -webkit-border-radius: 100px;
+      -moz-border-radius: 100px;
       background: url(http://link-to-your/image.jpg) no-repeat; }
     body .current .crown {
       background: transparent url(./img/crownBig.png) 0 0 no-repeat;
@@ -29,8 +29,10 @@ body {
       height: 134px;
       position: absolute;
       top: -84px;
-      right: 130px;
+      right: 155px;
       z-index: -1; }
+    body .current p {
+      margin: 18px 0 0 0; }
     body .current .awardTitle {
       font-size: 27px;
       font-weight: 200; }

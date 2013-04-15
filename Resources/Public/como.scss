@@ -26,11 +26,11 @@ body {
 		text-align: center;
 
 		img {
-			width: 300px;
-			height: 300px;
-			border-radius: 150px;
-			-webkit-border-radius: 150px;
-			-moz-border-radius: 150px;
+			width: 200px;
+			height: 200px;
+			border-radius: 100px;
+			-webkit-border-radius: 100px;
+			-moz-border-radius: 100px;
 			background: url(http://link-to-your/image.jpg) no-repeat;
 		}
 
@@ -40,8 +40,12 @@ body {
 			height: 134px;
 			position: absolute;
 			top: -84px;
-			right: 130px;
+			right: 155px;
 			z-index: -1;
+		}
+
+		p {
+			margin: 18px 0 0 0;
 		}
 
 		.awardTitle {
