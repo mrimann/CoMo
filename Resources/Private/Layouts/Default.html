@@ -8,11 +8,13 @@
 		<f:base />
 
 		<bootstrap:include />
+		<link href="{f:uri.resource(path: 'como.css', package: 'Mrimann.CoMo')}" media="screen" rel="stylesheet" type="text/css" />
+
 	</head>
 	<body>
+		<div class="logo">&nbsp;</div>
 		<f:flashMessages class="flashmessages" />
 
-		<h1><f:render section="Title" /></h1>
 		<f:render section="Content" />
 	</body>
 </html>

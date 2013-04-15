@@ -1,6 +1,9 @@
 {namespace como=Mrimann\CoMo\ViewHelpers}
 
 <div class="award {class}">
-	<h2>{award.month}: {award.userName} ({award.commitCount} commits)</h2>
+	<div class="crown">&nbsp;</div>
 	<como:gravatar email="{award.userEmail}" size="{size}" />
+	<p class="awardTitle">Coder of the Month</p>
+	<p class="name">{award.userName}</p>
+	<p class="commitCount">{award.commitCount} commits</p>
 </div>

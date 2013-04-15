@@ -57,8 +57,8 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 		);
 
 		$this->view->assign(
-			'coderOfTheMonthAwards',
-			$this->awardRepository->findLatestAwards(4)
+			'coderOfTheMonthAward',
+			$this->awardRepository->findLatestAwards(1)
 		);
 
 		$this->view->assign(
