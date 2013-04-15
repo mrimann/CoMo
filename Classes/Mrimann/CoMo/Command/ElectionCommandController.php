@@ -16,6 +16,19 @@ use TYPO3\Flow\Annotations as Flow;
 class ElectionCommandController extends BaseCommandController {
 
 	/**
+	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
+	 * @Flow\Inject
+	 */
+	protected $configurationManager;
+
+	/**
+	 * The settings for our package
+	 *
+	 * @var array our settings
+	 */
+	protected $settings;
+
+	/**
 	 * @var \Mrimann\CoMo\Services\ElectomatService
 	 * @Flow\Inject
 	 */
@@ -34,6 +47,16 @@ class ElectionCommandController extends BaseCommandController {
 	 */
 	var $topCommitters;
 
+
+	/**
+	 * Initialized our package's settings in $this->settings for further use
+	 */
+	protected function initializeOurSettings() {
+		$this->settings = $this->configurationManager->getConfiguration(
+			\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
+			'Mrimann.CoMo'
+		);
+	}
 	/**
 	 * Runs the election for the last month.
 	 *
@@ -41,6 +64,8 @@ class ElectionCommandController extends BaseCommandController {
 	 * @return void
 	 */
 	public function electLastMonthCommand($quiet = FALSE) {
+		$this->initializeOurSettings();
+
 		$this->quiet = $quiet;
 
 		$monthIdentifier = $this->electomat->getMonthIdentifierLastMonth();
@@ -50,7 +75,13 @@ class ElectionCommandController extends BaseCommandController {
 		// elect the global committer of the month award
 		if ($this->canAwardBeElected('committerOfTheMonth', $monthIdentifier) === TRUE) {
 			$this->showTopRankingAndAnnouncement('committerOfTheMonth');
-			$this->createNewAward('committerOfTheMonth', $monthIdentifier, $this->topCommitters->getFirst());
+			$award = $this->createNewAward('committerOfTheMonth', $monthIdentifier, $this->topCommitters->getFirst());
+			if ($this->settings['sendNotificationMailsForCoderOfTheMonth']) {
+				$this->notifyCeremonyMasterOnNewAward($award);
+				$this->outputLine('-> notifiying the ceremony master about that lucky moment...');
+			} else {
+				$this->outputLine('Mail notifications disabled, no mail sent to the ceremony master!');
+			}
 		}
 
 		// elect the topic awards
@@ -67,7 +98,17 @@ class ElectionCommandController extends BaseCommandController {
 
 			if ($this->canAwardBeElected($awardType, $monthIdentifier)) {
 				$this->showTopRankingAndAnnouncement($awardType);
-				$this->createNewAward($awardType, $monthIdentifier, $this->topCommitters->getFirst());
+
+				// create the award
+				$award = $this->createNewAward($awardType, $monthIdentifier, $this->topCommitters->getFirst());
+
+				// notify the ceremony master
+				if ($this->settings['sendNotificationMailsForTopicAwardWinner']) {
+					$this->notifyCeremonyMasterOnNewTopicAward($award);
+					$this->outputLine('-> notifiying the ceremony master about that lucky moment...');
+				} else {
+					$this->outputLine('Mail notifications disabled, no mail sent to ceremony master!');
+				}
 			}
 		}
 	}
@@ -149,6 +190,8 @@ class ElectionCommandController extends BaseCommandController {
 	 * @param string the type of the award
 	 * @param string the month identifier
 	 * @param \Mrimann\CoMo\Domain\Model\AggregatedDataPerUser $winner
+	 *
+	 * @return \Mrimann\CoMo\Domain\Model\Award the new award
 	 */
 	protected function createNewAward($type, $monthIdentifier, \Mrimann\CoMo\Domain\Model\AggregatedDataPerUser $winner) {
 		$award = new \Mrimann\CoMo\Domain\Model\Award();
@@ -158,6 +201,69 @@ class ElectionCommandController extends BaseCommandController {
 		$award->setMonth($monthIdentifier);
 		$award->setCommitCount($winner->getCommitCountByType($type));
 		$this->awardRepository->add($award);
+
+		return $award;
+	}
+
+	/**
+	 * Sends a mail to the ceremony master to notify him about a newly elected
+	 * monthly winner in the master category "coder of the month".
+	 *
+	 * @param \Mrimann\CoMo\Domain\Model\Award $award
+	 * @return void
+	 */
+	protected function notifyCeremonyMasterOnNewAward(\Mrimann\CoMo\Domain\Model\Award $award) {
+		$messageBody = 'We\'ve just elected the next winner:' . "\n\n" .
+			'The award for the month ' . $award->getMonth() . ' was won by ' . $award->getUserName() . ' (' .
+			$award->getUserEmail() . ') with ' . $award->getCommitCount() . ' commits.';
+
+		$this->sendNotificationMail(
+			$this->settings['ceremonyMasterEmail'],
+			'Ceremony Master',
+			'New Coder of the Month elected!',
+			$messageBody
+		);
+	}
+
+	/**
+	 * Sends a mail to the ceremony master to notify him about a newly elected
+	 * topic award.
+	 *
+	 * @param \Mrimann\CoMo\Domain\Model\Award $award
+	 * @return void
+	 */
+	protected function notifyCeremonyMasterOnNewTopicAward(\Mrimann\CoMo\Domain\Model\Award $award) {
+		$messageBody = 'We\'ve just elected the next topic-award:' . "\n\n" .
+			'The award in the category "' . $award->getType() . '" for the month ' .
+			$award->getMonth() . ' was won by ' . $award->getUserName() . ' (' .
+			$award->getUserEmail() . ') with ' . $award->getCommitCount() . ' commits.';
+
+		$this->sendNotificationMail(
+			$this->settings['ceremonyMasterEmail'],
+			'Ceremony Master',
+			'New topic award elected',
+			$messageBody
+		);
+	}
+
+	/**
+	 * Helper function to instantiate SwiftMailer and effectively send the mail
+	 * out to the recipient.
+	 *
+	 * @param string the recipient's e-mail address
+	 * @param string the name of the recipient
+	 * @param string the message's subject
+	 * @param string the message's body
+	 *
+	 * @return void
+	 */
+	protected function sendNotificationMail($recipientEmail, $recipientName, $subject, $messageBody) {
+		$mail = new \TYPO3\SwiftMailer\Message();
+		$mail->setFrom(array($this->settings['senderEmail'] => $this->settings['senderName']))
+			->setTo(array($recipientEmail => $recipientName))
+			->setSubject($subject)
+			->setBody($messageBody);
+		$mail->send();
 	}
 }
 ?>

@@ -8,3 +8,19 @@ Mrimann:
     # electing last month's awards
     # defaults to 100 days - which is roughly 3 months
     maxDaysToFetchFromGitLogHistory: 100
+
+    # whether to send mails to the ceremony master upon election of a new
+    # coder of the month
+    sendNotificationMailsForCoderOfTheMonth: FALSE
+
+    # whether to send mails to the ceremony master upon election of a new
+    # topic award winner
+    sendNotificationMailsForTopicAwardWinner: FALSE
+
+    # the e-mail address of the ceremony master (get's notifications
+    # upon newly elected awards)
+    ceremonyMasterEmail: mario+como@rimann.org
+
+    # e-mail and name of the sender of all the notification mails
+    senderEmail: como@example.org
+    senderName: CoMo
