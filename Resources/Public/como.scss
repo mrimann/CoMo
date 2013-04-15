@@ -1,5 +1,8 @@
-$font : Lucida Grande;
+$font : Source Sans Pro;
 $colorOrange: #f38529;
+
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,200,300);
 
 body {
 	background: transparent url(img/background.png);
@@ -43,15 +46,16 @@ body {
 
 		.awardTitle {
 			font-size: 27px;
-			font-weight: ligther;
+			font-weight: 200;
 		}
 		.name {
 			font-size: 45px;
 			color: $colorOrange;
-			font-weight: bold;
+			font-weight: 700;
 		}
 		.commitCount {
 			font-size: 14px;
+			font-weight: 200;
 		}
 	}
 }

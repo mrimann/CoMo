@@ -1,7 +1,8 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,200,300);
 body {
   background: transparent url(img/background.png);
   color: #fff;
-  font-family: Lucida Grande; }
+  font-family: Source Sans Pro; }
   body .logo {
     position: absolute;
     left: 100px;
@@ -32,19 +33,20 @@ body {
       z-index: -1; }
     body .current .awardTitle {
       font-size: 27px;
-      font-weight: ligther; }
+      font-weight: 200; }
     body .current .name {
       font-size: 45px;
       color: #f38529;
-      font-weight: bold; }
+      font-weight: 700; }
     body .current .commitCount {
-      font-size: 14px; }
+      font-size: 14px;
+      font-weight: 200; }
 
 .meta {
-  font-family: Lucida Grande; }
+  font-family: Source Sans Pro; }
 
 .lead {
-  font-family: Lucida Grande; }
+  font-family: Source Sans Pro; }
 
 .coder {
-  font-family: Lucida Grande; }
+  font-family: Source Sans Pro; }
