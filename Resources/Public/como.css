@@ -19,10 +19,11 @@ body {
     body .current img {
       width: 200px;
       height: 200px;
-      border-radius: 100px;
-      -webkit-border-radius: 100px;
-      -moz-border-radius: 100px;
-      background: url(http://link-to-your/image.jpg) no-repeat; }
+      border-radius: 110px;
+      -webkit-border-radius: 110px;
+      -moz-border-radius: 110px;
+      background: url(http://link-to-your/image.jpg) no-repeat;
+      border: 9px solid #fff; }
     body .current .crown {
       background: transparent url(./img/crownBig.png) 0 0 no-repeat;
       width: 148px;

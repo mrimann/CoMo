@@ -28,10 +28,11 @@ body {
 		img {
 			width: 200px;
 			height: 200px;
-			border-radius: 100px;
-			-webkit-border-radius: 100px;
-			-moz-border-radius: 100px;
+			border-radius: 110px;
+			-webkit-border-radius: 110px;
+			-moz-border-radius: 110px;
 			background: url(http://link-to-your/image.jpg) no-repeat;
+			border: 9px solid #fff;
 		}
 
 		.crown {
