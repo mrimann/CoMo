@@ -12,8 +12,12 @@
 	</div>
 
 	<div class="topicAwards">
-		<f:for each="{currentTopicAwards}" as="topicAward">
-			<f:render partial="TopicAward" arguments="{award: topicAward, size: 100}" />
-		</f:for>
+		<ul class="topicAwardsSlider">
+			<f:for each="{currentTopicAwards}" as="topicAward">
+				<li class="award">
+					<f:render partial="TopicAward" arguments="{award: topicAward, size: 100}" />
+				</li>
+			</f:for>
+		</ul>
 	</div>
 </f:section>

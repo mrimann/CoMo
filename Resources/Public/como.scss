@@ -83,12 +83,16 @@ body {
 	.topicAwards {
 		position: absolute;
 		bottom: 0;
+		margin: 0 auto;
 		width: 100%;
 		height: 200px;
 		text-align: center;
 
-		.award {
+		.bx-wrapper {
 			display: inline-block;
+		}
+
+		.award {
 			text-align: center;
 			width: 350px;
 

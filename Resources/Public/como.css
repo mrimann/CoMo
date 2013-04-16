@@ -59,11 +59,13 @@ body {
   body .topicAwards {
     position: absolute;
     bottom: 0;
+    margin: 0 auto;
     width: 100%;
     height: 200px;
     text-align: center; }
+    body .topicAwards .bx-wrapper {
+      display: inline-block; }
     body .topicAwards .award {
-      display: inline-block;
       text-align: center;
       width: 350px; }
       body .topicAwards .award p {
