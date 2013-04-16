@@ -6,24 +6,14 @@
 	<div class="row-fluid">
 		<p class="notice">Last month we've seen {numberOfCommits} commits within {numberOfActiveRepositories} of the {numberOfMonitoredRepositories} monitored repositories.</p>
 	</div>
-	<f:for each="{coderOfTheMonthAward}" as="award">
-		<f:if condition="{coderOfTheMonthAward.first} == {award}">
-			<f:then>
-				<f:render partial="Award" arguments="{award: award, class: 'current', size: 400}" />
-				<div class="month">
-					<f:format.date format="F Y">{award.month}</f:format.date>
-				</div>
-			</f:then>
-			<f:else>
-				<div class="span2">
-					<f:render partial="Award" arguments="{award: award, class: '', size: 150}" />
-				</div>
-			</f:else>
-		</f:if>
-	</f:for>
-	<f:for each="{currentTopicAwards}" as="topicAward">
-		<div class="span2">
+	<f:render partial="Award" arguments="{award: coderOfTheMonthAward, class: 'current', size: 400}" />
+	<div class="month">
+		<f:format.date format="F Y">{coderOfTheMonthAward.month}</f:format.date>
+	</div>
+
+	<div class="topicAwards">
+		<f:for each="{currentTopicAwards}" as="topicAward">
 			<f:render partial="TopicAward" arguments="{award: topicAward, size: 100}" />
-		</div>
-	</f:for>
+		</f:for>
+	</div>
 </f:section>
