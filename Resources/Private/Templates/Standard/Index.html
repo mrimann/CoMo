@@ -4,12 +4,15 @@
 
 <f:section name="Content">
 	<div class="row-fluid">
-		<p class="lead">Last month we've seen {numberOfCommits} commits within {numberOfActiveRepositories} of the {numberOfMonitoredRepositories} monitored repositories.</p>
+		<p class="notice">Last month we've seen {numberOfCommits} commits within {numberOfActiveRepositories} of the {numberOfMonitoredRepositories} monitored repositories.</p>
 	</div>
 	<f:for each="{coderOfTheMonthAward}" as="award">
 		<f:if condition="{coderOfTheMonthAward.first} == {award}">
 			<f:then>
 				<f:render partial="Award" arguments="{award: award, class: 'current', size: 400}" />
+				<div class="month">
+					<f:format.date format="F Y">{award.month}</f:format.date>
+				</div>
 			</f:then>
 			<f:else>
 				<div class="span2">
