@@ -1,6 +1,8 @@
 {namespace como=Mrimann\CoMo\ViewHelpers}
 
-<div class="topicAward {class}">
-	<h2>{award.type}: {award.userName} ({award.commitCount} commits)</h2>
+<div class="award {class}">
 	<como:gravatar email="{award.userEmail}" size="{size}" />
+	<p class="title">{award.type}</p>
+	<p class="name">{award.userName}</p>
+	<p class="commitCount">{award.commitCount}</p>
 </div>
