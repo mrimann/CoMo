@@ -21,6 +21,8 @@ But it goes even further: There's a command controller that can be run e.g. once
 	- cronjobs are built in a way that they can be fired regularly and will just exit as soon as nothing is to do
 - Shows several big-screen optimized views:
 	- the last month's winner(s)
+	- the trending team-members of the current month
+	- some statistics on the most active projects
 
 ## Configuration options
 
