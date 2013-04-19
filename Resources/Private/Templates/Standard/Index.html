@@ -1,10 +1,14 @@
 <f:layout name="Default"/>
 
-<f:section name="Title">Coder of The Month</f:section>
+<f:section name="Title">
+	<f:translate id="titleCoderOfTheMonth" />
+</f:section>
 
 <f:section name="Content">
 	<div class="row-fluid">
-		<p class="notice">Last month we've seen {numberOfCommits} commits within {numberOfActiveRepositories} of the {numberOfMonitoredRepositories} monitored repositories.</p>
+		<p class="notice">
+			<f:translate id="noticeTextSummary" arguments="{numberOfCommits: numberOfCommits, numberOfActiveRepositories: numberOfActiveRepositories, numberOfMonitoredRepositories: numberOfMonitoredRepositories}"/>
+		</p>
 	</div>
 	<f:render partial="Award" arguments="{award: coderOfTheMonthAward, class: 'current', size: 400}" />
 	<div class="month">

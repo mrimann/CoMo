@@ -1,6 +1,10 @@
 {namespace como=Mrimann\CoMo\ViewHelpers}
 
 <como:gravatar email="{award.userEmail}" size="{size}" />
-<p class="title">{award.type}</p>
+<p class="title">
+	<f:translate id="topicAwardType_{award.type}" />
+</p>
 <p class="name">{award.userName}</p>
-<p class="commitCount">{award.commitCount}</p>
+<p class="commitCount">
+	{award.commitCount} commits
+</p>

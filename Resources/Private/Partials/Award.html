@@ -3,7 +3,11 @@
 <div class="award {class}">
 	<div class="crown">&nbsp;</div>
 	<como:gravatar email="{award.userEmail}" size="{size}" />
-	<p class="awardTitle">Coder of the Month</p>
+	<p class="awardTitle">
+		<f:translate id="titleCoderOfTheMonth" />
+	</p>
 	<p class="name">{award.userName}</p>
-	<p class="commitCount">{award.commitCount} commits</p>
+	<p class="commitCount">
+		{award.commitCount} commits
+	</p>
 </div>
