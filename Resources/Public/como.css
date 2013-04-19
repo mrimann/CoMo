@@ -5,7 +5,7 @@ body {
   font-family: Source Sans Pro; }
   body .logo {
     position: absolute;
-    left: 100px;
+    left: 300px;
     top: 0;
     background: transparent url(img/logoTab.png);
     width: 119px;
@@ -15,18 +15,18 @@ body {
     font-weight: 200;
     position: absolute;
     top: 93px;
-    left: 216px; }
+    left: 416px; }
   body .notice {
     position: absolute;
-    left: 123px;
+    left: 323px;
     top: 160px;
     font-weight: 200;
     font-size: 18px;
-    width: 350px; }
+    width: 300px; }
   body .current {
     position: absolute;
-    top: 135px;
-    left: 600px;
+    top: 100px;
+    left: 650px;
     width: 600px;
     text-align: center; }
     body .current img {
