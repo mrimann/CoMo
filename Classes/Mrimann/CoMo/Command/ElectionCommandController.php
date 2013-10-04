@@ -79,10 +79,10 @@ class ElectionCommandController extends BaseCommandController {
 	 * @return string the month identifier
 	 */
 	protected function getMonthIdentifierLastMonth() {
-		$date = mktime(1, 1, 1, date('m') - 1, 1, date('Y'));
-		$month = new \DateTime('@' . $date);
+		$numberOfTheMonth = date('n') - 1;
+		$date = mktime(1, 1, 1, $numberOfTheMonth, 1, date('Y'));
 
-		return $month->format('Y-m');
+		return strftime('%Y-%m', $date);
 	}
 
 	/**
