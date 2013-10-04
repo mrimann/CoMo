@@ -44,6 +44,10 @@ class RepoDetectorGitwebCommandController extends BaseCommandController {
 	 * for the access to the Git repositories, could be e.g. "ssh://git@git.company.tld/" (if you're
 	 * using Gitolite or the like).
 	 *
+	 * If you're running CoMo on the same server that hosts your Git repositories, you can prefix
+	 * the repo's local path with "file://" and CoMo will not try to create a local clone before
+	 * going to extract the commits of that repository.
+	 *
 	 * @param string $url The URL to Gitweb
 	 * @param string $baseUrl The base URL that is put in front of the single repo's path
 	 * @param boolean whether the script should avoid any output

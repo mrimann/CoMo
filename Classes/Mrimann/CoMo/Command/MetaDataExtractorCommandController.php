@@ -52,12 +52,24 @@ class MetaDataExtractorCommandController extends BaseCommandController {
 	 * @param \Mrimann\CoMo\Domain\Model\Repository $repository
 	 */
 	protected function processSingleRepository(\Mrimann\CoMo\Domain\Model\Repository $repository) {
-		// prepare local cached clone for remote repositories
-		$workingDirectory = $this->getCachePath($repository);
-		$this->outputLine('-> working directory is: ' . $workingDirectory);
+		// prepare local cached clone for remote repositories if we're not on a local repo
+		if ($repository->isLocalRepository() === FALSE) {
+			$workingDirectory = $this->getCachePath($repository);
+			$this->outputLine('-> working directory is: ' . $workingDirectory);
 
-		$this->prepareCachedClone($repository, $workingDirectory);
-		$this->outputLine('-> cached clone is ready to rumble...');
+			$preparationResult = $this->prepareCachedClone($repository, $workingDirectory);
+			if ($preparationResult === TRUE) {
+				$this->outputLine('-> cached clone is ready to rumble...');
+			} else {
+				$this->outputLine('-> preparing local cache failed somehow, giving up on this repo.');
+				return;
+			}
+		} else {
+			$this->outputLine('-> OK, a local repository - just using that directory, no clone or pulling needed.');
+
+			$workingDirectory = $repository->getUrl();
+			$this->outputLine('-> working directory is: ' . $workingDirectory);
+		}
 
 		$lastProcessedHash = $this->extractCommits($repository);
 		if ($lastProcessedHash != '') {
@@ -83,7 +95,7 @@ class MetaDataExtractorCommandController extends BaseCommandController {
 		// use the --git-dir parameter for git log in case it's a local repository
 		$gitDirectory = '';
 		if ($repository->isLocalRepository()) {
-			$gitDirectory = '--git-dir ' . substr(substr($repository->getUrl(),7), 0, -4) . '/.git';
+			$gitDirectory = '--git-dir ' . substr(substr($repository->getUrl(),7), 0);
 		}
 
 		$logRange = '';
@@ -142,28 +154,42 @@ class MetaDataExtractorCommandController extends BaseCommandController {
 	 *
 	 * @param \Mrimann\CoMo\Domain\Model\Repository $repository
 	 * @param $workingDirectory
+	 *
+	 * @return boolean returns TRUE if preparation was successful, FALSE otherwise
 	 */
 	protected function prepareCachedClone(\Mrimann\CoMo\Domain\Model\Repository $repository, $workingDirectory) {
-		if ($repository->isLocalRepository()) {
-			$this->outputLine('-> OK, a local repository - just changing to that dir, no clone or pulling needed.');
-		} else {
-			// If working directory does not exist, create it by cloning repository into it
-			// and then change into that directory
-			if (!is_dir($workingDirectory . '/.git')) {
-				$this->outputLine($workingDirectory);
-				chdir($workingDirectory);
-				$this->outputLine('Created directory, going to clone now...');
-				exec('git clone ' . $repository->getUrl() . ' .');
-				$this->outputLine('Finished cloning from ' . $repository->getUrl());
+		// If working directory does not exist, create it by cloning repository into it
+		// and then change into that directory
+		if (!is_dir($workingDirectory . '/.git')) {
+			$this->outputLine($workingDirectory);
+			chdir($workingDirectory);
+			$this->outputLine('Created directory, going to clone now...');
+			$cloneResult = '';
+			exec('git clone ' . $repository->getUrl() . ' .', $foo, $cloneResult);
+			if ($cloneResult > 0) {
+				$this->outputLine('Oops, something went wrong while cloning...');
+				$result = FALSE;
 			} else {
-				chdir($workingDirectory);
-				// If there's a clone alredy, just pull the latest changes from the origin
-				$this->outputLine('going to pull changes from remote repo...');
-				exec ('git pull');
+				$this->outputLine('Finished cloning from ' . $repository->getUrl());
+				$result = TRUE;
+			}
+		} else {
+			chdir($workingDirectory);
+			// If there's a clone alredy, just pull the latest changes from the origin
+			$this->outputLine('going to pull changes from remote repo...');
+
+			$pullResult = '';
+			exec ('git pull', NULL, $pullResult);
+			if ($pullResult > 0) {
+				$this->outputLine('Oops, something went wrong while pulling the repository...');
+				$result = FALSE;
+			} else {
 				$this->outputLine('finished pulling changes.');
+				$result = TRUE;
 			}
 		}
 
+		return $result;
 	}
 
 	/**
