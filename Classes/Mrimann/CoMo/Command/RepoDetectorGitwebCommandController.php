@@ -40,7 +40,7 @@ class RepoDetectorGitwebCommandController extends BaseCommandController {
 	 * Use this command to read a list of repos from a Gitweb "website" and add those repositories
 	 * to the database for further processing afterwards.
 	 *
-	 * Call this with the URL to your Gitweb-Fronten, e.g. http://git.company.tld/ and the base-URL
+	 * Call this with the URL to your Gitweb-Frontend, e.g. http://git.company.tld/ and the base-URL
 	 * for the access to the Git repositories, could be e.g. "ssh://git@git.company.tld/" (if you're
 	 * using Gitolite or the like).
 	 *
