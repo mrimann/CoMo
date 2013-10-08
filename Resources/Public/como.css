@@ -13,6 +13,7 @@ body .logo {
   height: 151px;
 }
 body .month {
+  color: #f38529;
   font-size: 24px;
   font-weight: 200;
   position: absolute;
@@ -24,8 +25,8 @@ body .notice {
   left: 323px;
   top: 160px;
   font-weight: 200;
-  font-size: 18px;
-  width: 300px;
+  font-size: 26px;
+  width: 400px;
 }
 body .current {
   position: absolute;
@@ -62,10 +63,12 @@ body .current .name {
   font-size: 45px;
   color: #f38529;
   font-weight: 700;
+  margin: 0;
 }
 body .current .commitCount {
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 200;
+  margin: 0;
 }
 body .topicAwards {
   position: absolute;
