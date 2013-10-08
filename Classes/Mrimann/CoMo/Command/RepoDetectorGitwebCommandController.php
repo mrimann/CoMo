@@ -76,13 +76,21 @@ class RepoDetectorGitwebCommandController extends BaseCommandController {
 
 		// Read list of repositories from the Gitweb output
 		$repoList = file_get_contents($url);
-		$repoLines = explode("\n", $repoList);
-		$this->outputLine('Found %s repositories.', array(count($repoLines)));
+		$repositoryLines = explode("\n", $repoList);
 
-		if (empty($repoLines)) {
+		if (empty($repositoryLines)) {
 			$this->outputLine('No repos found, exiting.');
 			return;
 		}
+
+		// eliminate empty lines first
+		foreach ($repositoryLines as $line) {
+			if ($line != '') {
+				$repoLines[] = $line;
+			}
+		}
+
+		$this->outputLine('Found %s repositories.', array(count($repoLines)));
 
 		// process each single repository
 		$addedCount = 0;
