@@ -5,11 +5,10 @@
 </f:section>
 
 <f:section name="Content">
-	<div class="row-fluid">
-		<p class="notice">
-			<f:translate id="noticeTextSummary" arguments="{numberOfCommits: numberOfCommits, numberOfActiveRepositories: numberOfActiveRepositories, numberOfMonitoredRepositories: numberOfMonitoredRepositories}"/>
-		</p>
-	</div>
+	<p class="notice">
+		<f:translate id="noticeTextSummary" arguments="{numberOfCommits: numberOfCommits, numberOfActiveRepositories: numberOfActiveRepositories, numberOfMonitoredRepositories: numberOfMonitoredRepositories}"/>
+	</p>
+
 	<f:render partial="Award" arguments="{award: coderOfTheMonthAward, class: 'current', size: 400}" />
 	<div class="month">
 		<f:format.date format="F Y">{coderOfTheMonthAward.month}</f:format.date>
