@@ -44,16 +44,19 @@ class RepoDetectorGitwebCommandController extends BaseCommandController {
 	 * for the access to the Git repositories, could be e.g. "ssh://git@git.company.tld/" (if you're
 	 * using Gitolite or the like).
 	 *
+	 * By default, any newly found repository will *not* directly be marked as active.
+	 *
 	 * If you're running CoMo on the same server that hosts your Git repositories, you can prefix
 	 * the repo's local path with "file://" and CoMo will not try to create a local clone before
 	 * going to extract the commits of that repository.
 	 *
 	 * @param string $url The URL to Gitweb
 	 * @param string $baseUrl The base URL that is put in front of the single repo's path
+	 * @param boolean whether the found repos should be marked active, defaults to false
 	 * @param boolean whether the script should avoid any output
 	 * @return void
 	 */
-	public function fetchReposCommand($url, $baseUrl, $quiet = FALSE) {
+	public function fetchReposCommand($url, $baseUrl, $markAsActive = FALSE, $quiet = FALSE) {
 		$this->quiet = $quiet;
 
 		$url = $url . '?a=project_index';
@@ -103,6 +106,11 @@ class RepoDetectorGitwebCommandController extends BaseCommandController {
 				$repo = new \Mrimann\CoMo\Domain\Model\Repository();
 				$repo->setUrl($repoUrl);
 				$repo->setTitle($title);
+
+				// only mark the repo as active if this was requested
+				if ($markAsActive == TRUE) {
+					$repo->setIsActive(TRUE);
+				}
 
 				// Add repository to the database
 				$this->repositoryRepository->add($repo);
