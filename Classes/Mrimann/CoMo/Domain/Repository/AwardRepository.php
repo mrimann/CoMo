@@ -16,6 +16,12 @@ use TYPO3\Flow\Annotations as Flow;
 class AwardRepository extends \TYPO3\Flow\Persistence\Repository {
 
 	/**
+	 * @var \Mrimann\CoMo\Services\ElectomatService
+	 * @Flow\Inject
+	 */
+	var $electomatService;
+
+	/**
 	 * Finds the award of a given type for a specific month.
 	 *
 	 * @param string the month identifier
@@ -67,7 +73,7 @@ class AwardRepository extends \TYPO3\Flow\Persistence\Repository {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(
-				$query->equals('month', $this->getMonthIdentifierLastMonth()),
+				$query->equals('month', $this->electomatService->getMonthIdentifierLastMonth()),
 				$query->logicalNot(
 					$query->equals('type', 'committerOfTheMonth')
 				)
@@ -75,19 +81,6 @@ class AwardRepository extends \TYPO3\Flow\Persistence\Repository {
 		);
 
 		return $query->execute();
-	}
-
-	/**
-	 * Creates the identifier for last month in the format "YYYY-MM".
-	 *
-	 * TODO: Refactor this one to be in the electomatService if possible
-	 * @return string the month identifier
-	 */
-	protected function getMonthIdentifierLastMonth() {
-		$date = mktime(1, 1, 1, date('m') - 1, 1, date('Y'));
-		$month = new \DateTime('@' . $date);
-
-		return $month->format('Y-m');
 	}
 }
 ?>

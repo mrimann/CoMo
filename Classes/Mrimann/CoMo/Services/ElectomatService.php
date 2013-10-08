@@ -37,5 +37,17 @@ class ElectomatService {
 	public function getTopicAwardsForMonth($topic, $month) {
 		return $this->aggregatedDataPerUserRepository->findBestRankedForTopicAndMonth($topic, $month);
 	}
+
+	/**
+	 * Creates the identifier for last month in the format "YYYY-MM".
+	 *
+	 * @return string the month identifier
+	 */
+	public function getMonthIdentifierLastMonth() {
+		$numberOfTheMonth = date('n') - 1;
+		$date = mktime(1, 1, 1, $numberOfTheMonth, 1, date('Y'));
+
+		return strftime('%Y-%m', $date);
+	}
 }
 ?>

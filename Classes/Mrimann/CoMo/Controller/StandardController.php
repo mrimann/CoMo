@@ -34,20 +34,28 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	var $repositoryRepository;
 
 	/**
+	 * @var \Mrimann\CoMo\Services\ElectomatService
+	 * @Flow\Inject
+	 */
+	var $electomatService;
+
+	/**
 	 * Index action
 	 *
 	 * @return void
 	 */
 	public function indexAction() {
+		$monthIdentifier = $this->electomatService->getMonthIdentifierLastMonth();
+
 		$this->view->assign(
 			'numberOfCommits',
-			$this->commitRepository->getCommitsByMonth($this->getMonthIdentifierLastMonth())->count()
+			$this->commitRepository->getCommitsByMonth($monthIdentifier)->count()
 		);
 
 		$this->view->assign(
 			'numberOfActiveRepositories',
 			$this->repositoryRepository->extractTheRepositoriesFromAStackOfCommits(
-				$this->commitRepository->getCommitsByMonth($this->getMonthIdentifierLastMonth())
+				$this->commitRepository->getCommitsByMonth($monthIdentifier)
 			)->count()
 		);
 
@@ -65,19 +73,6 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 			'currentTopicAwards',
 			$this->awardRepository->findCurrentTopicAwards()
 		);
-	}
-
-	/**
-	 * Creates the identifier for last month in the format "YYYY-MM".
-	 *
-	 * TODO: Refactor this one to be in the electomatService if possible
-	 * @return string the month identifier
-	 */
-	protected function getMonthIdentifierLastMonth() {
-		$date = mktime(1, 1, 1, date('m') - 1, 1, date('Y'));
-		$month = new \DateTime('@' . $date);
-
-		return $month->format('Y-m');
 	}
 }
 

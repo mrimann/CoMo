@@ -43,7 +43,7 @@ class ElectionCommandController extends BaseCommandController {
 	public function electLastMonthCommand($quiet = FALSE) {
 		$this->quiet = $quiet;
 
-		$monthIdentifier = $this->getMonthIdentifierLastMonth();
+		$monthIdentifier = $this->electomat->getMonthIdentifierLastMonth();
 
 		$this->outputLine('Getting the awards for ' . $monthIdentifier);
 
@@ -70,19 +70,6 @@ class ElectionCommandController extends BaseCommandController {
 				$this->createNewAward($awardType, $monthIdentifier, $this->topCommitters->getFirst());
 			}
 		}
-	}
-
-	/**
-	 * Creates the identifier for last month in the format "YYYY-MM".
-	 *
-	 * TODO: Refactor this one to be in the electomatService if possible
-	 * @return string the month identifier
-	 */
-	protected function getMonthIdentifierLastMonth() {
-		$numberOfTheMonth = date('n') - 1;
-		$date = mktime(1, 1, 1, $numberOfTheMonth, 1, date('Y'));
-
-		return strftime('%Y-%m', $date);
 	}
 
 	/**
