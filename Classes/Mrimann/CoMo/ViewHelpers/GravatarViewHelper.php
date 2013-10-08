@@ -25,7 +25,7 @@ class GravatarViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedVi
 	 * @return string image tag HTML
 	 */
 	public function render($email, $size = 80) {
-		$url = 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?s=' . $size;
+		$url = 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?s=' . $size . '&d=retro';
 		$result = '<img src="' . $url . '">';
 		return $result;
 	}
