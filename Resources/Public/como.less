@@ -8,10 +8,18 @@ body {
 	background: transparent url(img/background.png);
 	color: #fff;
 	font-family: @font;
+	margin: 0;
+
+	.container {
+		width: 960px;
+		margin: 0 auto;
+		position: relative;
+		height: 790px;
+	}
 
 	.logo {
 		position: absolute;
-		left: 300px;
+		left: 80px;
 		top: 0;
 		background: transparent url(img/logoTab.png);
 		width: 119px;
@@ -24,12 +32,12 @@ body {
 		font-weight: 200;
 		position: absolute;
 		top: 93px;
-		left: 416px;
+		left: 250px;
 	}
 
 	.notice {
 		position: absolute;
-		left: 323px;
+		left: 100px;
 		top: 160px;
 		font-weight: 200;
 		font-size: 26px;
@@ -39,8 +47,8 @@ body {
 	.current {
 		position: absolute;
 		top: 100px;
-		left: 650px;
-		width: 600px;
+		right: 80px;
+		width: 300px;
 		text-align: center;
 
 		img {
@@ -58,7 +66,7 @@ body {
 			height: 134px;
 			position: absolute;
 			top: -84px;
-			right: 155px;
+			right: 0;
 			z-index: -1;
 		}
 
@@ -90,6 +98,7 @@ body {
 		width: 100%;
 		height: 200px;
 		text-align: center;
+		clear: both;
 
 		.bx-wrapper {
 			display: inline-block;
