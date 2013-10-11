@@ -3,7 +3,7 @@
 	<file original="" product-name="Mrimann.CoMo" source-language="en" datatype="plaintext">
 		<body>
 			<trans-unit id="noticeTextSummary" xml:space="preserve">
-				<source>Last month we've seen {numberOfCommits} commits within {numberOfActiveRepositories} of the {numberOfMonitoredRepositories} monitored repositories.</source>
+				<source>Last month we've seen {numberOfCommits} commits within {numberOfActiveRepositories} of the {numberOfMonitoredRepositories} monitored repositories. Those commits were created by {numberOfCommitters} different commiters.</source>
 			</trans-unit>
 			<trans-unit id="titleCoderOfTheMonth" xml:space="preserve">
 				<source>Coder of the Month</source>

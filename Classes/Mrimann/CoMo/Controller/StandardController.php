@@ -22,6 +22,12 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	var $awardRepository;
 
 	/**
+	 * @var \Mrimann\CoMo\Domain\Repository\AggregatedDataPerUserRepository
+	 * @Flow\Inject
+	 */
+	var $aggregatedDataPerUserRepository;
+
+	/**
 	 * @var \Mrimann\CoMo\Domain\Repository\CommitRepository
 	 * @Flow\Inject
 	 */
@@ -62,6 +68,11 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 		$this->view->assign(
 			'numberOfMonitoredRepositories',
 			$this->repositoryRepository->countByIsActive(TRUE)
+		);
+
+		$this->view->assign(
+			'numberOfCommitters',
+			$this->aggregatedDataPerUserRepository->findNumberOfCommittersPerMonth($monthIdentifier)
 		);
 
 		$this->view->assign(

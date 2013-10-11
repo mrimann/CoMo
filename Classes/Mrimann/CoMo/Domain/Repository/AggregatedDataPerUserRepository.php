@@ -100,5 +100,15 @@ class AggregatedDataPerUserRepository extends \TYPO3\Flow\Persistence\Repository
 
 		return $query->execute();
 	}
+
+	/**
+	 * Counts the number of different commiters for a given month.
+	 *
+	 * @param string the month identifier in the format YYYY-MM
+	 * @return integer the number of committers
+	 */
+	public function findNumberOfCommittersPerMonth($month) {
+		return $this->countByMonth($month);
+	}
 }
 ?>
