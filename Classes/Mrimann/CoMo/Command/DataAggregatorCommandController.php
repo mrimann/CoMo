@@ -28,6 +28,12 @@ class DataAggregatorCommandController extends BaseCommandController {
 	var $aggregatedDataPerUserRepository;
 
 	/**
+	 * @var \TYPO3\Flow\Persistence\Doctrine\PersistenceManager
+	 * @Flow\Inject
+	 */
+	var $persistenceManager;
+
+	/**
 	 * Processes the cached meta data and aggregates it to a usable format so they can be used easily
 	 * for showing some results.
 	 *
@@ -44,13 +50,16 @@ class DataAggregatorCommandController extends BaseCommandController {
 			return;
 		}
 
+		$numberOfProcessedCommits = 0;
 		foreach ($unprocessedCommits as $commit) {
 			$this->processSingleCommit($commit);
 			$commit->setIsAggregated(TRUE);
 			$this->commitRepository->update($commit);
+			$this->persistenceManager->persistAll();
+			$numberOfProcessedCommits++;
 		}
 
-		$this->outputLine('-> aggregated ' . count($unprocessedCommits) . ' commits.');
+		$this->outputLine('-> aggregated ' . $numberOfProcessedCommits . ' commits.');
 
 	}
 
