@@ -44,6 +44,16 @@ Well, basically one can create a ton of smallish commits and he'll be the winner
 
 	Sets the base directory to be used for the local cloning of the remote repositories before the data can be extracted.
 
+- whoGetsCredits: author
+
+	Defines who'll get the credits, this is defaulting to the author which usually is the one that created the change
+	and often is the same person that commits the change. The whole thing is configurable for situations where you want
+	to credit the committer instead.
+
+	Allowed values: "author" and "committer"
+
+	Sinces v1.2.0
+
 - sendNotificationMailsForCoderOfTheMonth: FALSE
 
 	Whether to send mails to the ceremony master upon election of a new coder of the month

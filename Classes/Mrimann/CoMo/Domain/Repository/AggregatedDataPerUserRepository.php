@@ -16,6 +16,12 @@ use TYPO3\Flow\Annotations as Flow;
 class AggregatedDataPerUserRepository extends \TYPO3\Flow\Persistence\Repository {
 
 	/**
+	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
+	 * @Flow\Inject
+	 */
+	protected $configurationManager;
+
+	/**
 	 * Returns either an existing aggregate-bucket for a given user+month combination - or creates
 	 * a new one to which the commits can be added later on.
 	 *
@@ -23,11 +29,20 @@ class AggregatedDataPerUserRepository extends \TYPO3\Flow\Persistence\Repository
 	 * @return \Mrimann\CoMo\Domain\Model\AggregatedDataPerUser|object
 	 */
 	public function findByCommitterAndMonth(\Mrimann\CoMo\Domain\Model\Commit $commit) {
+		$this->initializeOurSettings();
+		if ($this->settings['whoGetsCredits'] == 'committer') {
+			$email = $commit->getCommitterEmail();
+			$name = $commit->getCommitterName();
+		} else {
+			$email = $commit->getAuthorEmail();
+			$name = $commit->getAuthorName();
+		}
+
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(
 				$query->equals('month', $commit->getMonthIdentifier()),
-				$query->equals('userEmail', $commit->getCommitterEmail())
+				$query->equals('userEmail', $email)
 			)
 		);
 		$query->setLimit(1);
@@ -42,10 +57,10 @@ class AggregatedDataPerUserRepository extends \TYPO3\Flow\Persistence\Repository
 				$commit->getMonthIdentifier()
 			);
 			$result->setUserEmail(
-				$commit->getCommitterEmail()
+				$email
 			);
 			$result->setUserName(
-				$commit->getCommitterName()
+				$name
 			);
 			$this->add($result);
 			$this->persistenceManager->persistAll();
@@ -109,6 +124,16 @@ class AggregatedDataPerUserRepository extends \TYPO3\Flow\Persistence\Repository
 	 */
 	public function findNumberOfCommittersPerMonth($month) {
 		return $this->countByMonth($month);
+	}
+
+	/**
+	 * Initialized our package's settings in $this->settings for further use
+	 */
+	protected function initializeOurSettings() {
+		$this->settings = $this->configurationManager->getConfiguration(
+			\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
+			'Mrimann.CoMo'
+		);
 	}
 }
 ?>
