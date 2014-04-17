@@ -179,7 +179,7 @@ class MetaDataExtractorCommandController extends BaseCommandController {
 			$this->outputLine('going to pull changes from remote repo...');
 
 			$pullResult = '';
-			exec ('git pull', NULL, $pullResult);
+			exec ('git pull', $unusedOutput, $pullResult);
 			if ($pullResult > 0) {
 				$this->outputLine('Oops, something went wrong while pulling the repository...');
 				$result = FALSE;
