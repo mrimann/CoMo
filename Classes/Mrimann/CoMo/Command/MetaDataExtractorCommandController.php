@@ -98,6 +98,21 @@ class MetaDataExtractorCommandController extends BaseCommandController {
 			$gitDirectory = '--git-dir ' . substr(substr($repository->getUrl(),7), 0);
 		}
 
+		// check if there are commits at all (to avoid nasty CLI output in case we hit
+		// an empty repository without any commits in it)
+		$noCommitsYetOutput = array();
+		$noCommitsYetExitCode = 0;
+		@exec(
+			'git ' . $gitDirectory . ' log -n 1 > /dev/null 2>&1',
+			$noCommitsYetOutput,
+			$noCommitsYetExitCode
+		);
+		if ($noCommitsYetExitCode > 0) {
+			$this->outputLine('-> seen an empty repository without any commit at all, skipping!');
+			return '';
+		}
+
+
 		$logRange = '';
 		if ($lastProcessedCommit != '') {
 			$this->outputLine('-> there are commits already, extracting since ' . substr($lastProcessedCommit, 0, 8));
