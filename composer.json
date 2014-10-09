@@ -14,7 +14,7 @@
 		}
 	],
 	"require": {
-		"typo3/flow": "2.0.*",
+		"typo3/flow": "2.2.*",
 		"typo3/swiftmailer": "4.1.*"
 	},
 	"autoload": {
